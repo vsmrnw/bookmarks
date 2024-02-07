@@ -50,6 +50,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'bookmarks.wsgi.application'
 
+# Login settings
+LOGIN_REDIRECT_URL = 'dashboard'
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
