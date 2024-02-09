@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user
+from django.contrib.auth import get_user, get_user_model
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from django.urls import reverse
@@ -10,10 +10,23 @@ class AccountAppTestCase(TestCase):
             'username': 'testuser',
             'password': 'secret'}
         User.objects.create_user(**self.credentials)
+        self.credentials2 = {
+            'username': 'testuser@test.ru',
+            'password': 'secret'
+        }
 
         self.client = Client()
+        self.register = reverse('register')
         self.login = reverse('login')
         self.logout = reverse('logout')
+
+    def test_get_register_view(self):
+        """
+        Test that we can get register view correctly
+        """
+        response = self.client.get(path=self.register)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'account/register.html')
 
     def test_user_created(self):
         """
@@ -46,5 +59,18 @@ class AccountAppTestCase(TestCase):
         self.assertRedirects(response, '/account/login/?next=/account/')
 
     def test_logout_view(self):
+        """
+        Test that we can logout correctly
+        """
         response = self.client.post(self.logout, follow=True)
         self.assertEqual(response.status_code, 200)
+
+    def test_post_register_view_with_email_existed(self):
+        """
+        Test that we can't register with existed email
+        """
+        get_user_model().objects.create_user(**self.credentials2)
+        response = self.client.post(path=self.register,
+                                    data=self.credentials2)
+        self.assertFormError(response, 'form', 'email',
+                             'Email already in use.')
