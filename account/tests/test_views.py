@@ -44,3 +44,7 @@ class AccountAppTestCase(TestCase):
         """
         response = self.client.get(reverse('dashboard'))
         self.assertRedirects(response, '/account/login/?next=/account/')
+
+    def test_logout_view(self):
+        response = self.client.post(self.logout, follow=True)
+        self.assertEqual(response.status_code, 200)
