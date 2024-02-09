@@ -39,5 +39,8 @@ class AccountAppTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_redirect_if_not_logged_in(self):
+        """
+        Test that we can redirect if not logged in
+        """
         response = self.client.get(reverse('dashboard'))
         self.assertRedirects(response, '/account/login/?next=/account/')
