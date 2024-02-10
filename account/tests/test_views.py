@@ -6,11 +6,11 @@ from django.urls import reverse
 
 class AccountAppTestCase(TestCase):
     def setUp(self):
-        self.credentials = {
+        self.credentials_username = {
             'username': 'testuser',
             'password': 'secret'}
-        User.objects.create_user(**self.credentials)
-        self.credentials2 = {
+        User.objects.create_user(**self.credentials_username)
+        self.credentials_email = {
             'username': 'testuser@test.ru',
             'password': 'secret'
         }
@@ -32,7 +32,8 @@ class AccountAppTestCase(TestCase):
         """
         Test that user was successfully created
         """
-        user = User.objects.filter(username=self.credentials['username'])
+        user = User.objects.filter(
+            username=self.credentials_username['username'])
         self.assertTrue(user.exists())
 
     def test_get_login_view(self):
@@ -43,13 +44,21 @@ class AccountAppTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'registration/login.html')
 
-    def test_post_login_view(self):
+    def test_post_login_by_username(self):
         """
-        Test that we can log in correctly
+        Test that we can log in correctly by username
         """
         response = self.client.post(path=self.login,
-                                    data=self.credentials)
+                                    data=self.credentials_username)
         self.assertEqual(response.status_code, 302)
+
+    def test_post_login_by_email(self):
+        """
+        Test that we can log in correctly by email
+        """
+        response = self.client.post(path=self.login,
+                                    data=self.credentials_email)
+        self.assertEqual(response.status_code, 200)
 
     def test_redirect_if_not_logged_in(self):
         """
@@ -69,8 +78,8 @@ class AccountAppTestCase(TestCase):
         """
         Test that we can't register with existed email
         """
-        get_user_model().objects.create_user(**self.credentials2)
+        get_user_model().objects.create_user(**self.credentials_email)
         response = self.client.post(path=self.register,
-                                    data=self.credentials2)
+                                    data=self.credentials_email)
         self.assertFormError(response, 'form', 'email',
                              'Email already in use.')
