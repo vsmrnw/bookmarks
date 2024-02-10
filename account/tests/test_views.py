@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user, get_user_model
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from django.urls import reverse
@@ -45,7 +45,7 @@ class AccountAppTestCase(TestCase):
 
     def test_post_login_view(self):
         """
-        Test that we can login correctly
+        Test that we can log in correctly
         """
         response = self.client.post(path=self.login,
                                     data=self.credentials)
@@ -60,7 +60,7 @@ class AccountAppTestCase(TestCase):
 
     def test_logout_view(self):
         """
-        Test that we can logout correctly
+        Test that we can log out correctly
         """
         response = self.client.post(self.logout, follow=True)
         self.assertEqual(response.status_code, 200)
