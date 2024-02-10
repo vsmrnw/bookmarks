@@ -31,6 +31,7 @@ def dashboard(request):
                   'account/dashboard.html',
                   {'section': 'dashboard'})
 
+
 @login_required
 def edit(request):
     if request.method == 'POST':

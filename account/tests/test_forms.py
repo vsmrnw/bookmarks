@@ -7,19 +7,19 @@ class AccountFormTestCase(TestCase):
 
     def setUp(self):
         self.register_error = \
-                    {'username': 'test',
-                     'First_name': 'Test',
-                     'Last_name': 'Testov',
-                     'email': 'test@test.ru',
-                     'password': '1234',
-                     'password2': '123'}
+            {'username': 'test',
+             'First_name': 'Test',
+             'Last_name': 'Testov',
+             'email': 'test@test.ru',
+             'password': '1234',
+             'password2': '123'}
         self.register = \
-                    {'username': 'test',
-                     'First_name': 'Test',
-                     'Last_name': 'Testov',
-                     'email': 'test@test.ru',
-                     'password': '1234',
-                     'password2': '1234'}
+            {'username': 'test',
+             'First_name': 'Test',
+             'Last_name': 'Testov',
+             'email': 'test@test.ru',
+             'password': '1234',
+             'password2': '1234'}
         self.edit = {'First_name': 'Testovv'}
 
     def test_register_form_error_different_passwords(self):
@@ -30,4 +30,3 @@ class AccountFormTestCase(TestCase):
     def test_register_form(self):
         form = UserRegistrationForm(data=self.register)
         self.assertTrue(form.is_valid())
-
